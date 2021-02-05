@@ -1,0 +1,38 @@
+@import 'antd/dist/antd.css';
+
+.ant-list {
+  padding-left: 32px;
+  padding-right: 40px;
+  padding-top: 19px;
+}
+
+.ant-list-grid .ant-col > .ant-list-item {
+  display: flex;
+  margin-bottom: 32px;
+}
+
+.ant-image {
+  width: 183px;
+  height: 281px;
+}
+
+.ant-card {
+  flex-grow: 1;
+  height: 281px;
+}
+
+.ant-card-head-title {
+  white-space: normal;
+}
+
+.ant-list-item {
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.ant-card-bordered {
+  border: none;
+}
+
+.ant-card-head {
+  border: none;
+}

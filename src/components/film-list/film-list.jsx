@@ -19,8 +19,6 @@ export default class FilmList extends Component {
 
   getFilms() {
     this.movieDbService.getResource('return').then((films) => {
-      // console.log(films.results);
-      // console.log(films);
       this.setState({
         data: films.results,
       });

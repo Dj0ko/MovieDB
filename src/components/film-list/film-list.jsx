@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { List, Card } from 'antd';
 import { format } from 'date-fns';
 import MovieDbService from '../../services/movies-services';
+import Spinner from '../spinner/spinner';
+import ErrorMessage from '../error-message/error-message';
 
 import './film-list.css';
 
@@ -10,6 +12,8 @@ export default class FilmList extends Component {
 
   state = {
     data: [],
+    loading: true,
+    error: false,
   };
 
   constructor() {
@@ -17,12 +21,23 @@ export default class FilmList extends Component {
     this.getFilms();
   }
 
-  getFilms() {
-    this.movieDbService.getResource('return').then((films) => {
-      this.setState({
-        data: films.results,
-      });
+  onError = () => {
+    this.setState({
+      loading: false,
+      error: true,
     });
+  };
+
+  getFilms() {
+    this.movieDbService
+      .getResource('return')
+      .then((films) => {
+        this.setState({
+          data: films.results,
+          loading: false,
+        });
+      })
+      .catch(this.onError);
   }
 
   shortenText(text) {
@@ -35,7 +50,15 @@ export default class FilmList extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, loading, error } = this.state;
+
+    if (loading) {
+      return <Spinner />;
+    }
+
+    if (error) {
+      return <ErrorMessage />;
+    }
 
     return (
       <List

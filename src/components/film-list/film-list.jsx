@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { List, Card } from 'antd';
 import { format } from 'date-fns';
+import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
 import MovieDbService from '../../services/movies-services';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../error-message/error-message';
@@ -16,10 +18,17 @@ export default class FilmList extends Component {
     error: false,
   };
 
-  constructor() {
-    super();
-    this.getFilms();
+  componentDidMount() {
+    this.updateFilms();
   }
+
+  componentDidUpdate = debounce((prevProps) => {
+    const { movieTitle } = this.props;
+
+    if (movieTitle !== prevProps.movieTitle) {
+      this.updateFilms();
+    }
+  }, 1000);
 
   onError = () => {
     this.setState({
@@ -28,9 +37,24 @@ export default class FilmList extends Component {
     });
   };
 
-  getFilms() {
+  getShortText(text) {
+    let shortenText = text;
+    if (shortenText.length > 200) {
+      shortenText = text.slice(0, 200);
+      shortenText = `${shortenText.slice(0, shortenText.lastIndexOf(' '))} ...`;
+    }
+    return shortenText;
+  }
+
+  updateFilms() {
+    const { movieTitle } = this.props;
+
+    if (!movieTitle) {
+      return;
+    }
+
     this.movieDbService
-      .getResource('return')
+      .getResource(movieTitle)
       .then((films) => {
         this.setState({
           data: films.results,
@@ -38,15 +62,6 @@ export default class FilmList extends Component {
         });
       })
       .catch(this.onError);
-  }
-
-  shortenText(text) {
-    let as = text;
-    if (as.length > 200) {
-      as = text.slice(0, 200);
-      as = `${as.slice(0, as.lastIndexOf(' '))} ...`;
-    }
-    return as;
   }
 
   render() {
@@ -75,7 +90,7 @@ export default class FilmList extends Component {
             />
             <Card title={item.title}>
               <p>{format(new Date(item.release_date), 'PP')}</p>
-              {this.shortenText(item.overview)}
+              {this.getShortText(item.overview)}
             </Card>
           </List.Item>
         )}
@@ -83,3 +98,7 @@ export default class FilmList extends Component {
     );
   }
 }
+
+FilmList.propTypes = {
+  movieTitle: PropTypes.string.isRequired,
+};

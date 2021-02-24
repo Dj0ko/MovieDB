@@ -1,11 +1,5 @@
 @import 'antd/dist/antd.css';
 
-.ant-list {
-  padding-left: 32px;
-  padding-right: 40px;
-  padding-top: 19px;
-}
-
 .ant-list-grid .ant-col > .ant-list-item {
   display: flex;
   margin-bottom: 32px;

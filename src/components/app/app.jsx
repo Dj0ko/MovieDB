@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { Component } from 'react';
+import MovieDbService from '../../services/movies-services';
+import Search from '../search/search';
 import FilmList from '../film-list/film-list';
 
 import './app.css';
 
-const App = () => <FilmList />;
+export default class App extends Component {
+  movieDbService = new MovieDbService();
 
-export default App;
+  state = {
+    movieTitle: '',
+  };
+
+  getKeyword = (keyword) => {
+    this.setState({
+      movieTitle: keyword,
+    });
+  };
+
+  render() {
+    const { movieTitle } = this.state;
+
+    return (
+      <>
+        <Search getKeyword={this.getKeyword} />
+        <FilmList movieTitle={movieTitle} />
+      </>
+    );
+  }
+}

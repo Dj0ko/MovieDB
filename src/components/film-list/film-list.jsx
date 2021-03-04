@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Card, Pagination } from 'antd';
+import { List, Card, Pagination, Rate } from 'antd';
 import { format } from 'date-fns';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
@@ -17,10 +17,12 @@ export default class FilmList extends Component {
     loading: true,
     error: false,
     page: 1,
+    guestSessionId: '',
   };
 
   componentDidMount() {
     this.updateFilms();
+    this.getSessionId();
   }
 
   componentDidUpdate = debounce((prevProps, prevState) => {
@@ -46,15 +48,29 @@ export default class FilmList extends Component {
     });
   };
 
+  onToggleRate(value, id) {
+    const { guestSessionId } = this.state;
+
+    this.movieDbService.rateMovie(value, id, guestSessionId);
+  }
+
   getShortText(text) {
     let shortenText = text;
 
-    if (shortenText.length > 200) {
-      shortenText = text.slice(0, 200);
+    if (shortenText.length > 100) {
+      shortenText = text.slice(0, 100);
       shortenText = `${shortenText.slice(0, shortenText.lastIndexOf(' '))} ...`;
     }
 
     return shortenText;
+  }
+
+  getSessionId() {
+    this.movieDbService.getGuestSession().then((body) => {
+      this.setState({
+        guestSessionId: body.guest_session_id,
+      });
+    });
   }
 
   updateFilms() {
@@ -107,7 +123,8 @@ export default class FilmList extends Component {
               />
               <Card title={item.title}>
                 <p>{item.release_date ? format(new Date(item.release_date), 'PP') : null}</p>
-                {this.getShortText(item.overview)}
+                <p>{this.getShortText(item.overview)}</p>
+                <Rate allowHalf count="10" onChange={(value) => this.onToggleRate(value, item.id)} />
               </Card>
             </List.Item>
           )}

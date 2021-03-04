@@ -12,6 +12,10 @@ export default class App extends Component {
     movieTitle: '',
   };
 
+  componentDidMount() {
+    this.movieDbService.getGuestSession();
+  }
+
   getKeyword = (keyword) => {
     this.setState({
       movieTitle: keyword,

@@ -1,0 +1,31 @@
+@import 'antd/dist/antd.css';
+
+.ant-list-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.movie-list__pagination {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ant-pagination-options {
+  display: none;
+}
+
+.ant-pagination-item,
+.ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination-next .ant-pagination-item-link {
+  border: none;
+}
+
+.ant-pagination-item-active {
+  background-color: #1890ff;
+}
+
+.ant-pagination-item-active a {
+  color: #ffffff;
+}

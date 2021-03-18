@@ -11,6 +11,7 @@ export default class Search extends Component {
 
   onLabelChange = (evt) => {
     const { getKeyword } = this.props;
+
     getKeyword(evt.target.value);
     this.setState({
       movieTitle: evt.target.value,

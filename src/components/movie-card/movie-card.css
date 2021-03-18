@@ -1,0 +1,148 @@
+@import 'antd/dist/antd.css';
+
+.ant-list-grid .ant-col > .ant-list-item {
+  display: flex;
+  margin-bottom: 32px;
+}
+
+.ant-image {
+  position: absolute;
+  z-index: 1;
+  top: 10px;
+  left: 10px;
+  width: 60px;
+  height: 91px;
+}
+
+.ant-card {
+  width: 100%;
+  height: 245px;
+}
+
+.ant-card-head-title {
+  padding-bottom: 0;
+  padding-top: 7px;
+  white-space: normal;
+}
+
+.ant-list-item {
+  position: relative;
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+  padding: 0;
+  margin-bottom: 34px;
+}
+
+.ant-card-bordered {
+  border: none;
+}
+
+.ant-card-head {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #000000;
+
+  padding-left: 83px;
+  border: none;
+}
+
+.ant-card-body {
+  padding: 0 10px;
+}
+
+.movie-card__vote-average {
+  position: absolute;
+  top: 9px;
+  right: 3px;
+
+  width: 28px;
+  height: 26px;
+  border: 2px solid;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.movie-card__data-release {
+  padding-left: 73px;
+  margin-bottom: 7px;
+
+  font-size: 12px;
+  line-height: 22px;
+  color: #827e7e;
+}
+
+.movie-card__genres {
+  display: flex;
+  flex-wrap: wrap;
+
+  padding: 0;
+  padding-left: 73px;
+  margin-bottom: 7px;
+
+  list-style: none;
+}
+
+.movie-card__genres-item {
+  padding: 2px 5px;
+  margin-right: 8px;
+  margin-bottom: 4px;
+
+  font-size: 12px;
+  font-weight: 15px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+
+  background-color: #fafafa;
+}
+
+.movie-card__text {
+  margin-bottom: 4px;
+  margin: 0;
+}
+
+.ant-rate {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+}
+
+.anticon svg {
+  width: 15px;
+  height: 15px;
+}
+
+@media (min-width: 1024px) {
+  .ant-image {
+    width: 183px;
+    height: 281px;
+
+    top: 0;
+    left: 0;
+  }
+
+  .ant-card {
+    width: 454px;
+    height: 281px;
+
+    padding-left: 183px;
+  }
+
+  .ant-card-body {
+    padding: 0 20px;
+  }
+
+  .ant-card-head {
+    width: 255px;
+    padding-left: 20px;
+  }
+
+  .movie-card__data-release {
+    padding-left: 0;
+  }
+
+  .movie-card__genres {
+    padding-left: 0;
+  }
+}

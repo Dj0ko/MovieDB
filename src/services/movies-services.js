@@ -21,7 +21,7 @@ export default class MovieDbService {
   }
 
   async getGuestSession() {
-    const res = await fetch(`${this.apiGuestSession}`);
+    const res = await fetch(this.apiGuestSession);
 
     if(!res.ok) {
       throw new Error();
@@ -32,9 +32,9 @@ export default class MovieDbService {
     return body;
   }
 
-  async rateMovie(value, movieId, guestSessionId) {
+  async rateMovie(myRating, movieId, guestSessionId) {
     const rate = {
-      "value": value
+      "value": myRating
     }
 
     const res = await fetch(`${this.apiBase}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`, {
@@ -44,10 +44,33 @@ export default class MovieDbService {
       },
       body: JSON.stringify(rate)
     })
-    
+
     const body = await res.json();
-    console.log('body: ', body);
 
     return body; 
+  }
+
+  async getRatedMovies(guestSession) {
+    const res = await fetch(`${this.apiBase}guest_session/${guestSession}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`);
+
+    if(!res.ok) {
+      throw new Error();
+    }
+
+    const body = await res.json();
+
+    return body;
+  }
+
+  async getGenres() {
+    const res = await fetch(`${this.apiBase}genre/movie/list?api_key=${this.apiKey}&language=en-US`);
+
+    if(!res.ok) {
+      throw new Error();
+    }
+
+    const body = await res.json();
+
+    return body;
   }
 }

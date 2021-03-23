@@ -64,6 +64,22 @@
   line-height: 22px;
 }
 
+.movie-card__vote-average--red {
+  border-color: #e90000;
+}
+
+.movie-card__vote-average--orange {
+  border-color: #e97e00;
+}
+
+.movie-card__vote-average--yellow {
+  border-color: #e9d100;
+}
+
+.movie-card__vote-average--green {
+  border-color: #66e900;
+}
+
 .movie-card__data-release {
   padding-left: 73px;
   margin-bottom: 7px;
@@ -134,7 +150,7 @@
   }
 
   .ant-card-head {
-    width: 255px;
+    width: 267px;
     padding-left: 20px;
   }
 

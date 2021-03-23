@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { List, Pagination } from 'antd';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
-import MovieDbService from '../../services/movies-services';
+import movieDbService from '../../services/movies-services';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../error-message/error-message';
 import MovieCard from '../movie-card/movie-card';
@@ -10,14 +10,18 @@ import MovieCard from '../movie-card/movie-card';
 import './movie-list.css';
 
 export default class MovieList extends Component {
-  movieDbService = new MovieDbService();
-
   state = {
     data: [],
     loading: true,
     error: false,
     page: 1,
+    start: false,
   };
+
+  /* При окрытии приложения показываются самые популярные фильмы */
+  componentDidMount() {
+    this.getTopRated();
+  }
 
   /* Обновление компонента */
   componentDidUpdate = debounce((prevProps, prevState) => {
@@ -57,21 +61,40 @@ export default class MovieList extends Component {
     });
   };
 
+  /* Показываем лучшие фильмы при загрузке приложения */
+  getTopRated = () => {
+    movieDbService
+      .getTopRated()
+      .then((movies) => {
+        this.setState({
+          data: movies,
+          loading: false,
+          start: true,
+        });
+      })
+      .catch(this.onError);
+  };
+
   /* Функция, обновляющая фильмы по новому ключевому слову */
   updateMovies() {
     const { keyword } = this.props;
     const { page } = this.state;
 
+    this.setState({
+      loading: true,
+    });
+
     if (!keyword) {
       return;
     }
 
-    this.movieDbService
+    movieDbService
       .getResource(keyword, page)
       .then((movies) => {
         this.setState({
           data: movies,
           loading: false,
+          start: false,
         });
       })
       .catch(this.onError);
@@ -81,10 +104,15 @@ export default class MovieList extends Component {
   showRatedMovies() {
     const { guestSessionId } = this.props;
 
-    this.movieDbService.getRatedMovies(guestSessionId).then((movies) => {
+    this.setState({
+      loading: true,
+    });
+
+    movieDbService.getRatedMovies(guestSessionId).then((movies) => {
       this.setState({
         data: movies,
         loading: false,
+        start: false,
       });
     });
   }
@@ -94,19 +122,24 @@ export default class MovieList extends Component {
     const { keyword } = this.props;
     const { page } = this.state;
 
-    this.movieDbService
+    this.setState({
+      loading: true,
+    });
+
+    movieDbService
       .getResource(keyword, page)
       .then((movies) => {
         this.setState({
           data: movies,
           loading: false,
+          start: false,
         });
       })
       .catch(this.onError);
   }
 
   render() {
-    const { data, loading, error, page } = this.state;
+    const { data, loading, error, page, start } = this.state;
     const { guestSessionId, setRating, idsAndRatings } = this.props;
 
     if (loading) {
@@ -142,13 +175,15 @@ export default class MovieList extends Component {
             </List.Item>
           )}
         />
-        <Pagination
-          current={page}
-          onChange={this.onChangePage}
-          total={data.total_results}
-          defaultPageSize="20"
-          className="movie-list__pagination"
-        />
+        {!start ? (
+          <Pagination
+            current={page}
+            onChange={this.onChangePage}
+            total={data.total_results}
+            defaultPageSize="20"
+            className="movie-list__pagination"
+          />
+        ) : null}
       </>
     );
   }

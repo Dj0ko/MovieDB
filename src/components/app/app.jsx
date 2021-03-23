@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MovieDbService from '../../services/movies-services';
+import movieDbService from '../../services/movies-services';
 import Search from '../search/search';
 import MovieList from '../movie-list/movie-list';
 import { GenresProvider } from '../genres-context/genres-context';
@@ -7,8 +7,6 @@ import { GenresProvider } from '../genres-context/genres-context';
 import './app.css';
 
 export default class App extends Component {
-  movieDbService = new MovieDbService();
-
   state = {
     keyword: '',
     guestSessionId: '',
@@ -23,12 +21,22 @@ export default class App extends Component {
   }
 
   onToggleRated = () => {
+    const buttonSearch = document.querySelector('.button--search');
+    const buttonRated = document.querySelector('.button--rated');
+    buttonRated.classList.add('button--active');
+    buttonSearch.classList.remove('button--active');
+
     this.setState({
       showRated: true,
     });
   };
 
   onToggleSearch = () => {
+    const buttonSearch = document.querySelector('.button--search');
+    const buttonRated = document.querySelector('.button--rated');
+    buttonSearch.classList.add('button--active');
+    buttonRated.classList.remove('button--active');
+
     this.setState({
       showRated: false,
     });
@@ -41,7 +49,7 @@ export default class App extends Component {
   };
 
   getSessionId() {
-    this.movieDbService.getGuestSession().then((body) => {
+    movieDbService.getGuestSession().then((body) => {
       this.setState({
         guestSessionId: body.guest_session_id,
       });
@@ -49,7 +57,7 @@ export default class App extends Component {
   }
 
   getGenres() {
-    this.movieDbService.getGenres().then((body) => {
+    movieDbService.getGenres().then((body) => {
       this.setState({
         genres: body,
       });
@@ -75,52 +83,27 @@ export default class App extends Component {
   render() {
     const { keyword, guestSessionId, idsAndRatings, showRated, genres } = this.state;
 
-    const buttonSearchStyle = {
-      borderBottom: '',
-      color: '',
-    };
-
-    const buttonRatedStyle = {
-      borderBottom: '',
-      color: '',
-    };
-
-    if (!showRated) {
-      buttonSearchStyle.borderBottom = '2px solid #1890FF';
-      buttonSearchStyle.color = '#1890FF';
-      buttonRatedStyle.borderBottom = '';
-      buttonRatedStyle.color = '';
-    } else {
-      buttonSearchStyle.borderBottom = '';
-      buttonSearchStyle.color = '';
-      buttonRatedStyle.borderBottom = '2px solid #1890FF';
-      buttonRatedStyle.color = '#1890FF';
-    }
-
     return (
-      <GenresProvider value={genres}>
+      <>
         <div className="container container__button">
-          <button
-            type="button"
-            className="button button--search"
-            style={buttonSearchStyle}
-            onClick={this.onToggleSearch}
-          >
+          <button type="button" className="button button--search button--active" onClick={this.onToggleSearch}>
             Search
           </button>
-          <button type="button" className="button button--rated" style={buttonRatedStyle} onClick={this.onToggleRated}>
+          <button type="button" className="button button--rated" onClick={this.onToggleRated}>
             Rated
           </button>
         </div>
         {!showRated ? <Search getKeyword={this.getKeyword} /> : null}
-        <MovieList
-          keyword={keyword}
-          guestSessionId={guestSessionId}
-          setRating={this.setRating}
-          idsAndRatings={idsAndRatings}
-          showRated={showRated}
-        />
-      </GenresProvider>
+        <GenresProvider value={genres}>
+          <MovieList
+            keyword={keyword}
+            guestSessionId={guestSessionId}
+            setRating={this.setRating}
+            idsAndRatings={idsAndRatings}
+            showRated={showRated}
+          />
+        </GenresProvider>
+      </>
     );
   }
 }

@@ -1,12 +1,12 @@
-export default class MovieDbService {
+class MovieDbService {
 
   apiKey = '198993f9d1f84637e4e2e8449e1752fe';
 
-  apiBase = 'https://api.themoviedb.org/3/';
+  apiBase = 'https://api.themoviedb.org/3';
 
-  apiSearchMovie = `${this.apiBase}search/movie?api_key=${this.apiKey}`;
+  apiSearchMovie = `${this.apiBase}/search/movie?api_key=${this.apiKey}`;
 
-  apiGuestSession = `${this.apiBase}authentication/guest_session/new?api_key=${this.apiKey}`;
+  apiGuestSession = `${this.apiBase}/authentication/guest_session/new?api_key=${this.apiKey}`;
   
   async getResource(keyword, page) {
     const res = await fetch(`${this.apiSearchMovie}&page=${page}&query=${keyword}`);
@@ -37,7 +37,7 @@ export default class MovieDbService {
       "value": myRating
     }
 
-    const res = await fetch(`${this.apiBase}movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`, {
+    const res = await fetch(`${this.apiBase}/movie/${movieId}/rating?api_key=${this.apiKey}&guest_session_id=${guestSessionId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
@@ -51,7 +51,19 @@ export default class MovieDbService {
   }
 
   async getRatedMovies(guestSession) {
-    const res = await fetch(`${this.apiBase}guest_session/${guestSession}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`);
+    const res = await fetch(`${this.apiBase}/guest_session/${guestSession}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`);
+
+    if(!res.ok) {
+      throw new Error();
+    }
+
+    const body = await res.json();
+
+    return body;
+  }
+
+  async getTopRated() {
+    const res = await fetch(`${this.apiBase}/movie/top_rated?api_key=${this.apiKey}&language=en-US`);
 
     if(!res.ok) {
       throw new Error();
@@ -63,7 +75,7 @@ export default class MovieDbService {
   }
 
   async getGenres() {
-    const res = await fetch(`${this.apiBase}genre/movie/list?api_key=${this.apiKey}&language=en-US`);
+    const res = await fetch(`${this.apiBase}/genre/movie/list?api_key=${this.apiKey}&language=en-US`);
 
     if(!res.ok) {
       throw new Error();
@@ -74,3 +86,6 @@ export default class MovieDbService {
     return body;
   }
 }
+
+const movieDbService = new MovieDbService();
+export default movieDbService;

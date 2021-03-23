@@ -1,16 +1,15 @@
 /* Шрифт */
 
 @font-face {
-  font-family: "Inter";
-  src: url("../../fonts/Inter-Regular.woff");
+  font-family: 'Inter';
+  src: url('../../fonts/Inter-Regular.woff');
   font-weight: 400;
   font-style: normal;
 }
 
-
 /* body */
 body {
-  font-family: "Inter", "Arial", sans-serif;;
+  font-family: 'Inter', 'Arial', sans-serif;
   width: 420px;
   height: auto;
   margin: 0 auto;
@@ -28,7 +27,7 @@ body {
   margin-bottom: 19px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #D9D9D9;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .button {
@@ -41,6 +40,11 @@ body {
 
 .button:focus {
   outline: none;
+}
+
+.button--active {
+  border-bottom: 2px solid #1890ff;
+  color: #1890ff;
 }
 
 @media (min-width: 1024px) {

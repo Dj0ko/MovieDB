@@ -1,1 +1,1 @@
-https://moviedb-xi.vercel.app/
+https://moviedb-dj0ko.vercel.app

@@ -15,12 +15,10 @@ export default class MovieCard extends Component {
   };
 
   componentDidMount() {
-    console.log('componentDidMount');
     this.setStars();
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
     this.resetStars();
   }
 

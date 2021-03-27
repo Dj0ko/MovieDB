@@ -18,13 +18,38 @@ export default class MovieList extends Component {
     start: false,
   };
 
+  /* Функция, обновляющая фильмы по новому ключевому слову */
+  updateMovies = debounce(() => {
+    const { keyword } = this.props;
+    const { page } = this.state;
+
+    this.setState({
+      loading: true,
+    });
+
+    if (!keyword) {
+      return;
+    }
+
+    movieDbService
+      .getResource(keyword, page)
+      .then((movies) => {
+        this.setState({
+          data: movies,
+          loading: false,
+          start: false,
+        });
+      })
+      .catch(this.onError);
+  }, 2000);
+
   /* При окрытии приложения показываются самые популярные фильмы */
   componentDidMount() {
     this.getTopRated();
   }
 
   /* Обновление компонента */
-  componentDidUpdate = debounce((prevProps, prevState) => {
+  componentDidUpdate = (prevProps, prevState) => {
     const { keyword, showRated } = this.props;
     const { page } = this.state;
 
@@ -44,7 +69,7 @@ export default class MovieList extends Component {
         this.showRatedMovies();
       }
     }
-  }, 1000);
+  };
 
   /* Функция, устанавлиющая значение страницы при её изменении */
   onChangePage = (page) => {
@@ -75,40 +100,16 @@ export default class MovieList extends Component {
       .catch(this.onError);
   };
 
-  /* Функция, обновляющая фильмы по новому ключевому слову */
-  updateMovies() {
-    const { keyword } = this.props;
+  /* Функция, показывающая оцененные фильмы */
+  showRatedMovies() {
+    const { guestSessionId } = this.props;
     const { page } = this.state;
 
     this.setState({
       loading: true,
     });
 
-    if (!keyword) {
-      return;
-    }
-
-    movieDbService
-      .getResource(keyword, page)
-      .then((movies) => {
-        this.setState({
-          data: movies,
-          loading: false,
-          start: false,
-        });
-      })
-      .catch(this.onError);
-  }
-
-  /* Функция, показывающая оцененные фильмы */
-  showRatedMovies() {
-    const { guestSessionId } = this.props;
-
-    this.setState({
-      loading: true,
-    });
-
-    movieDbService.getRatedMovies(guestSessionId).then((movies) => {
+    movieDbService.getRatedMovies(guestSessionId, page).then((movies) => {
       this.setState({
         data: movies,
         loading: false,
@@ -119,23 +120,33 @@ export default class MovieList extends Component {
 
   /* Функция, обновляющая фильмы при изменении страницы */
   updatePages() {
-    const { keyword } = this.props;
+    const { keyword, showRated, guestSessionId } = this.props;
     const { page } = this.state;
 
     this.setState({
       loading: true,
     });
 
-    movieDbService
-      .getResource(keyword, page)
-      .then((movies) => {
+    if (showRated) {
+      movieDbService.getRatedMovies(guestSessionId, page).then((movies) => {
         this.setState({
           data: movies,
           loading: false,
           start: false,
         });
-      })
-      .catch(this.onError);
+      });
+    } else {
+      movieDbService
+        .getResource(keyword, page)
+        .then((movies) => {
+          this.setState({
+            data: movies,
+            loading: false,
+            start: false,
+          });
+        })
+        .catch(this.onError);
+    }
   }
 
   render() {

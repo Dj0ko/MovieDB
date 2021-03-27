@@ -14,24 +14,40 @@ export default class MovieCard extends Component {
     value: 0,
   };
 
-  componentDidUpdate(prevProps) {
-    const { id } = this.props;
-
-    if (id !== prevProps.id) {
-      this.resetStars();
-      this.setStars();
-    }
+  componentDidMount() {
+    console.log('componentDidMount');
+    this.setStars();
   }
 
-  getShortText(text, leng) {
-    let shortenText = text;
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+    this.resetStars();
+  }
 
-    if (shortenText.length > leng) {
-      shortenText = text.slice(0, leng);
-      shortenText = `${shortenText.slice(0, shortenText.lastIndexOf(' '))} ...`;
+  getShortText() {
+    const { title } = this.props;
+    let { overview } = this.props;
+
+    if (overview.length <= 80) {
+      return overview;
     }
 
-    return shortenText;
+    if (title.length < 28) {
+      overview = overview.slice(0, 130);
+      overview = `${overview.slice(0, overview.lastIndexOf(' '))}...`;
+    }
+
+    if (title.length >= 28 && title.length < 60) {
+      overview = overview.slice(0, 85);
+      overview = `${overview.slice(0, overview.lastIndexOf(' '))}...`;
+    }
+
+    if (title.length >= 60) {
+      overview = overview.slice(0, 60);
+      overview = `${overview.slice(0, overview.lastIndexOf(' '))}...`;
+    }
+
+    return overview;
   }
 
   setStars = () => {
@@ -43,6 +59,12 @@ export default class MovieCard extends Component {
           value: el.myRating,
         });
       }
+    });
+  };
+
+  resetStars = () => {
+    this.setState({
+      value: 0,
     });
   };
 
@@ -74,14 +96,8 @@ export default class MovieCard extends Component {
     return voteAverage;
   };
 
-  resetStars = () => {
-    this.setState({
-      value: 0,
-    });
-  };
-
   render() {
-    const { poster, title, dataRelease, overview, id, voteAverage } = this.props;
+    const { poster, title, dataRelease, id, voteAverage } = this.props;
 
     const { value } = this.state;
 
@@ -120,7 +136,7 @@ export default class MovieCard extends Component {
               return <ul className="movie-card__genres">{genreNames}</ul>;
             }}
           </GenresConsumer>
-          <p className="movie-card__text">{this.getShortText(overview, 60)}</p>
+          <p className="movie-card__text">{this.getShortText()}</p>
           <Rate allowHalf count="10" onChange={(rateValue) => this.handleChange(rateValue, id)} value={value} />
         </Card>
       </>

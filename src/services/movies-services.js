@@ -50,8 +50,8 @@ class MovieDbService {
     return body; 
   }
 
-  async getRatedMovies(guestSession) {
-    const res = await fetch(`${this.apiBase}/guest_session/${guestSession}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`);
+  async getRatedMovies(guestSession, page) {
+    const res = await fetch(`${this.apiBase}/guest_session/${guestSession}/rated/movies?api_key=${this.apiKey}&page=${page}&language=en-US&sort_by=created_at.asc`);
 
     if(!res.ok) {
       throw new Error();

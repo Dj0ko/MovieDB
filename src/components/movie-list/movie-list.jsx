@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { List, Pagination } from 'antd';
 import debounce from 'lodash.debounce';
@@ -67,9 +66,9 @@ export default class MovieList extends Component {
 
     if (showRated !== prevProps.showRated) {
       if (!showRated) {
-        // this.updateMovies();
         this.setMovies();
       } else {
+        this.onChangePage(1);
         this.showRatedMovies();
       }
     }

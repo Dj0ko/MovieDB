@@ -18,6 +18,15 @@ export default class MovieCard extends Component {
     this.setStars();
   }
 
+  componentDidUpdate(prevProps) {
+    const { data } = this.props;
+
+    if (data !== prevProps.data) {
+      this.resetStars();
+      this.setStars();
+    }
+  }
+
   componentWillUnmount() {
     this.resetStars();
   }
@@ -50,6 +59,10 @@ export default class MovieCard extends Component {
 
   setStars = () => {
     const { id, idsAndRatings } = this.props;
+
+    this.setState({
+      value: 0,
+    });
 
     idsAndRatings.forEach((el) => {
       if (el.id === id) {
@@ -153,4 +166,5 @@ MovieCard.propTypes = {
   guestSessionId: PropTypes.string.isRequired,
   idsAndRatings: PropTypes.arrayOf(PropTypes.object).isRequired,
   genreIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

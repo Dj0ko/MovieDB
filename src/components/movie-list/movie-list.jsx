@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { List, Pagination } from 'antd';
 import debounce from 'lodash.debounce';
@@ -16,6 +17,7 @@ export default class MovieList extends Component {
     error: false,
     page: 1,
     start: false,
+    newMovies: [],
   };
 
   /* Функция, обновляющая фильмы по новому ключевому слову */
@@ -38,6 +40,7 @@ export default class MovieList extends Component {
           data: movies,
           loading: false,
           start: false,
+          newMovies: movies,
         });
       })
       .catch(this.onError);
@@ -64,11 +67,20 @@ export default class MovieList extends Component {
 
     if (showRated !== prevProps.showRated) {
       if (!showRated) {
-        this.updateMovies();
+        // this.updateMovies();
+        this.setMovies();
       } else {
         this.showRatedMovies();
       }
     }
+  };
+
+  setMovies = () => {
+    const { newMovies } = this.state;
+
+    this.setState({
+      data: newMovies,
+    });
   };
 
   /* Функция, устанавлиющая значение страницы при её изменении */
@@ -151,7 +163,7 @@ export default class MovieList extends Component {
 
   render() {
     const { data, loading, error, page, start } = this.state;
-    const { guestSessionId, setRating, idsAndRatings } = this.props;
+    const { guestSessionId, setRating, idsAndRatings, showRated } = this.props;
 
     if (loading) {
       return <Spinner />;
@@ -182,6 +194,8 @@ export default class MovieList extends Component {
                 setRating={(myRating, id) => setRating(myRating, id)}
                 idsAndRatings={idsAndRatings}
                 genreIds={item.genre_ids}
+                showRated={showRated}
+                data={data.results}
               />
             </List.Item>
           )}

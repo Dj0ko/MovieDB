@@ -93,9 +93,10 @@ export default class App extends Component {
             Rated
           </button>
         </div>
-        {!showRated ? <Search getKeyword={this.getKeyword} /> : null}
+        {!showRated ? <Search getKeyword={this.getKeyword} keyword={keyword} /> : null}
         <GenresProvider value={genres}>
           <MovieList
+            rememberMovies={this.rememberMovies}
             keyword={keyword}
             guestSessionId={guestSessionId}
             setRating={this.setRating}

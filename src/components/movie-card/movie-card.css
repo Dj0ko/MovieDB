@@ -48,9 +48,6 @@
 }
 
 .ant-card-body {
-  /* display: flex;
-  flex-direction: column; */
-  /* height: 219px; */
   padding: 0 10px;
 }
 
@@ -123,7 +120,6 @@
 }
 
 .ant-rate {
-  /* margin-top: auto; */
   position: fixed;
   bottom: 0;
   right: 10px;

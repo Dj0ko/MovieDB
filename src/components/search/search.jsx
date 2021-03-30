@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import PropTypes from 'prop-types';
@@ -8,6 +9,14 @@ export default class Search extends Component {
   state = {
     movieTitle: '',
   };
+
+  componentDidMount() {
+    const { keyword } = this.props;
+
+    this.setState({
+      movieTitle: keyword,
+    });
+  }
 
   onLabelChange = (evt) => {
     const { getKeyword } = this.props;

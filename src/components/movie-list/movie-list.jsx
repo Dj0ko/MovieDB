@@ -85,6 +85,7 @@ export default class MovieList extends Component {
   /* Функция, устанавлиющая значение страницы при её изменении */
   onChangePage = (page) => {
     this.setState({
+      loading: true,
       page,
     });
   };

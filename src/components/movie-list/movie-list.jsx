@@ -22,10 +22,10 @@ export default class MovieList extends Component {
   /* Функция, обновляющая фильмы по новому ключевому слову */
   updateMovies = debounce(() => {
     const { keyword } = this.props;
-    const { page } = this.state;
 
     this.setState({
       loading: true,
+      page: 1,
     });
 
     if (!keyword) {
@@ -33,7 +33,7 @@ export default class MovieList extends Component {
     }
 
     movieDbService
-      .getResource(keyword, page)
+      .getResource(keyword, 1)
       .then((movies) => {
         this.setState({
           data: movies,
@@ -56,7 +56,6 @@ export default class MovieList extends Component {
     const { page } = this.state;
 
     if (keyword !== prevProps.keyword) {
-      this.onChangePage(1);
       this.updateMovies();
     }
 
@@ -68,7 +67,6 @@ export default class MovieList extends Component {
       if (!showRated) {
         this.setMovies();
       } else {
-        this.onChangePage(1);
         this.showRatedMovies();
       }
     }
@@ -79,13 +77,13 @@ export default class MovieList extends Component {
 
     this.setState({
       data: newMovies,
+      page: 1,
     });
   };
 
   /* Функция, устанавлиющая значение страницы при её изменении */
   onChangePage = (page) => {
     this.setState({
-      loading: true,
       page,
     });
   };
@@ -115,13 +113,13 @@ export default class MovieList extends Component {
   /* Функция, показывающая оцененные фильмы */
   showRatedMovies() {
     const { guestSessionId } = this.props;
-    const { page } = this.state;
 
     this.setState({
       loading: true,
+      page: 1,
     });
 
-    movieDbService.getRatedMovies(guestSessionId, page).then((movies) => {
+    movieDbService.getRatedMovies(guestSessionId, 1).then((movies) => {
       this.setState({
         data: movies,
         loading: false,

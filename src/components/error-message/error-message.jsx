@@ -1,8 +1,6 @@
 import React from 'react';
 import { Alert } from 'antd';
 
-// const ErrorMessage = () => <Alert message="Что-то пошло не так" type="error" closable />;
-
 const ErrorMessage = () => {
   if (!navigator.onLine) {
     return <Alert message="Проверьте соединение с интернетом" type="error" closable />;

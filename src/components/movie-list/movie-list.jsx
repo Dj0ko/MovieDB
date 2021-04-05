@@ -26,6 +26,7 @@ export default class MovieList extends Component {
     this.setState({
       loading: true,
       page: 1,
+      error: false,
     });
 
     if (!keyword) {
@@ -171,7 +172,7 @@ export default class MovieList extends Component {
       return <ErrorMessage />;
     }
 
-    if (data.length === 0) {
+    if (data.total_results === 0) {
       return <p>По данному запросу фильмов не найдено</p>;
     }
 

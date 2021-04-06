@@ -77,6 +77,7 @@ export default class MovieList extends Component {
     const { newMovies } = this.state;
 
     this.setState({
+      error: false,
       data: newMovies,
       page: 1,
     });
@@ -118,15 +119,19 @@ export default class MovieList extends Component {
     this.setState({
       loading: true,
       page: 1,
+      error: false,
     });
 
-    movieDbService.getRatedMovies(guestSessionId, 1).then((movies) => {
-      this.setState({
-        data: movies,
-        loading: false,
-        start: false,
-      });
-    });
+    movieDbService
+      .getRatedMovies(guestSessionId, 1)
+      .then((movies) => {
+        this.setState({
+          data: movies,
+          loading: false,
+          start: false,
+        });
+      })
+      .catch(this.onError);
   }
 
   /* Функция, обновляющая фильмы при изменении страницы */
@@ -136,16 +141,20 @@ export default class MovieList extends Component {
 
     this.setState({
       loading: true,
+      error: false,
     });
 
     if (showRated) {
-      movieDbService.getRatedMovies(guestSessionId, page).then((movies) => {
-        this.setState({
-          data: movies,
-          loading: false,
-          start: false,
-        });
-      });
+      movieDbService
+        .getRatedMovies(guestSessionId, page)
+        .then((movies) => {
+          this.setState({
+            data: movies,
+            loading: false,
+            start: false,
+          });
+        })
+        .catch(this.onError);
     } else {
       movieDbService
         .getResource(keyword, page)
